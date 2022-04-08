@@ -9,7 +9,7 @@ Projeto prático na trilha de React - Ignite
 ## Sobre
  * Aplicação simulando operação em Ecommerce com hook de carrinho de compras
 <br>
-<img alt="my-wallet-app" name="my-wallet-app" src="./public/shoes-store.gif" />
+<img alt="shoes-store-app" name="shoes-store-app" src="./public/shoes-store.gif" />
 
 ## Instalação
 
