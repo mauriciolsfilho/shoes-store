@@ -6,7 +6,7 @@ import {
 } from "react-icons/md";
 import { useCart } from "../../hooks/useCart";
 import { formatPrice } from "../../util/format";
-import { Container, ProductTable, Total } from "./styles";
+import { CheckoutButton, Container, ProductTable, Total } from "./styles";
 
 interface Product {
   id: number;
@@ -108,7 +108,9 @@ const Cart = (): JSX.Element => {
       </ProductTable>
 
       <footer>
-        <button type="button">Finalizar pedido</button>
+        <CheckoutButton type="button" disabled>
+          Finalizar pedido
+        </CheckoutButton>
 
         <Total>
           <span>TOTAL</span>
