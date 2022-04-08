@@ -1,10 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
 import { Product, Stock } from "../types";
@@ -60,12 +54,15 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
       const prodExists = cartList.find((prod) => prod.id === productId);
       const reqAmount = prodExists ? prodExists.amount + 1 : 1;
-
-      console.log(reqAmount, stock);
       if (reqAmount > stock.amount) {
         toast.error("Quantidade solicitada fora de estoque");
         return;
       }
+      if (prodExists) {
+        prodExists.amount = reqAmount;
+        return updateCartAndPersist(cartList);
+      }
+
       const product = await getProduct(productId);
 
       cartList.push({ ...product, amount: 1 });
@@ -77,7 +74,17 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const removeProduct = (productId: number) => {
     try {
-      // TODO
+      const cartList = [...cart];
+      const prodIndex = cartList.findIndex((prod) => prod.id === productId);
+
+      // Index não encontrado (retorno é -1)
+      if (prodIndex === -1) {
+        throw Error();
+      } else {
+        cartList.splice(prodIndex, 1);
+      }
+
+      updateCartAndPersist(cartList);
     } catch {
       toast.error("Erro na remoção do produto");
     }
@@ -88,7 +95,20 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      // TODO
+      if (amount <= 0) return;
+
+      const stock = await getStockProduct(productId);
+
+      if (stock.amount < amount) {
+        return toast.error("Quantidade solicitada fora de estoque");
+      }
+
+      const cartList = [...cart];
+      const prodEdit = cartList.find((prod) => prod.id === productId);
+      if (prodEdit) {
+        prodEdit.amount = amount;
+      }
+      updateCartAndPersist(cartList);
     } catch {
       toast.error("Erro na alteração de quantidade do produto");
     }
