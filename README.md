@@ -37,4 +37,8 @@ $ yarn
 #execute o projeto
 $ yarn start
 ```
+```bash 
+#execute a API fake
+$ yarn server
+```
 
